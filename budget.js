@@ -18,7 +18,7 @@ var svg = d3.select("body").append("svg")
     .append("g")
     .attr("transform", "translate("+width/2+","+height/2+")");
 
-d3.tsv("data.tsv", type, function(error, data) {
+d3.tsv("combinedbudget.tsv", type, function(error, data) {
     var path = svg.datum(data).selectAll('path')
         .data(pie)
         .enter().append("path")
@@ -26,6 +26,8 @@ d3.tsv("data.tsv", type, function(error, data) {
         .attr("d", arc)
         .each(function(d) { this._current = d; });
 
+    path.append("text")
+        .text(function(d) { return d.department; });
     d3.selectAll('input')
         .on("change", change);
 
@@ -43,6 +45,7 @@ d3.tsv("data.tsv", type, function(error, data) {
 });
 
 function type(d) {
+    d.department = d.department;
     d.budget2015 = +d.budget2015;
     d.budget2016 = +d.budget2016;
     return d;
